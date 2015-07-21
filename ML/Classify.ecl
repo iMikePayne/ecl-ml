@@ -943,7 +943,7 @@ EXPORT Logistic_sparse(REAL8 Ridge=0.00001, REAL8 Epsilon=0.000000001, UNSIGNED2
 
         SHARED BetaPair := LOOP(mBeta00+OldExpY_00
                        , (COUNTER<=MaxIter)
-                          AND (DMAT.Converted.FromPart2Elm(PBblas.MU.From(ROWS(LEFT),mu_comp.BetaError))[1].value > 
+                          AND (DMAT.Converted.FromPart2Elm(PBblas.MU.From(ROWS(LEFT),mu_comp.BetaError))[1].value >= 
                                DMAT.Converted.FromPart2Elm(PBblas.MU.From(ROWS(LEFT),mu_comp.BetaMaxError))[1].value)
                        , Step(ROWS(LEFT),COUNTER)
                    ); 
@@ -1014,7 +1014,7 @@ EXPORT Logistic_sparse(REAL8 Ridge=0.00001, REAL8 Epsilon=0.000000001, UNSIGNED2
         
         mXlocdist := DMAT.Converted.FromElement(mXloc,mXlocmap);
       
-        mBeta := Types.ToMatrix(Beta0);
+        mBeta := DISTRIBUTE(Types.ToMatrix(Beta0),x);
         mBetastats := Mat.Has(mBeta).Stats;
         mBeta_n := mBetastats.XMax;
         
